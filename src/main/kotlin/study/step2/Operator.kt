@@ -25,9 +25,5 @@ enum class Operator(val operator: String) {
         fun find(operator: String): Operator? {
             return values().find { o -> o.operator == operator }
         }
-
-        fun contains(operator: String): Boolean {
-            return values().map { o -> o.operator }.contains(operator)
-        }
     }
 }

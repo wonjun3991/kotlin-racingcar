@@ -11,16 +11,27 @@ class Calculator {
         val formulaSplit = formula.split(" ")
 
         formulaSplit.forEach { formula: String ->
-            when {
-                formula.toIntOrNull() != null -> addOperandStack(operandStack, formula)
-                Operator.contains(formula) -> addOperatorStack(operatorStack, formula)
-                else -> throw IllegalArgumentException("연산자나 피연산자가 아닌 값이 입력되었습니다.")
-            }
-
-            if (canOperate(operandStack, operatorStack)) operandStack.add(process(operandStack, operatorStack))
+            parseToAddStack(formula, operandStack, operatorStack)
+            operate(operandStack, operatorStack)
         }
 
         return operandStack.pop()
+    }
+
+    private fun operate(operandStack: Stack<Int>, operatorStack: Stack<Operator>) {
+        if (canOperate(operandStack, operatorStack)) operandStack.add(process(operandStack, operatorStack))
+    }
+
+    private fun parseToAddStack(
+        formula: String,
+        operandStack: Stack<Int>,
+        operatorStack: Stack<Operator>
+    ) {
+        when {
+            formula.toIntOrNull() != null -> addOperandStack(operandStack, formula)
+            Operator.find(formula) != null -> addOperatorStack(operatorStack, formula)
+            else -> throw IllegalArgumentException("연산자나 피연산자가 아닌 값이 입력되었습니다.")
+        }
     }
 
     private fun hasTwoOperands(operandStack: Stack<Int>): Boolean {
